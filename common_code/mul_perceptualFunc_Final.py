@@ -56,6 +56,47 @@ def create_perceptual_loss2(value, img_tensor, model, gamma=10000,
     return loss
 
 
+def create_perceptual_loss_dino(value, pre_dino_fn, img_tensor, img_dino_tensor, model, dino_model, gamma=10000, scalar=1, dino_scalar=10, target_scalar=100, layers=['9', '19', '29', '38', '48'], targetID=None):
+    img_tensor = img_tensor.detach()
+    featex = FeatureExtractor(model.features, layers)
+    target = model(img_tensor).argmax().detach() if targetID is None else targetID
+    init_feat = featex(img_tensor)
+    print(f"Target: {target}")
+
+    dino_features = dino_model.forward_features(img_dino_tensor)
+    clstoken = dino_features['x_norm_clstoken']
+
+    L2 = torch.nn.MSELoss()
+
+    def loss(img):
+        # perceptual loss
+        out = 0
+        for f, g in zip(init_feat, featex(img)):
+            out += L2(f, g)
+        out *= gamma
+        out += L2(img, img_tensor)*scalar
+
+        # dinov2 loss
+        img_dino = pre_dino_fn(img)
+        dino_features = dino_model.forward_features(img_dino)
+        clstoken_dino = dino_features['x_norm_clstoken']
+        out -= L2(clstoken, clstoken_dino) * dino_scalar
+
+        # l2 loss of response
+        response = model(img)
+
+        if targetID is None:
+            others = torch.max(response[0, :target].max(),
+                            response[0, target + 1:].max())
+            lab = response[0, target]
+            return out + (lab - others - value)**2
+        else:
+            # Perturb img to maximize response of targetID
+            lab = response[0, targetID]
+            return out - lab * target_scalar
+
+    return loss
+
 # multi-class chris
 def create_perceptual_loss_multiclass(value, img_tensor, model, gamma=10000,
                                       scalar=1,
@@ -83,7 +124,7 @@ def create_perceptual_loss_multiclass(value, img_tensor, model, gamma=10000,
 
 def find_direction(
         loss,
-        factual,
+        factual, # image_variable
         mins=False,
         maxs=False,
         iterations=200
@@ -103,7 +144,7 @@ def find_direction(
         if maxs is not False:
             max_mask = direction.data > maxs
             direction.data[max_mask] = mins[max_mask]
-        l = loss(direction)
+        l = loss(direction) # x'
         optimizer.zero_grad()
         l.backward(retain_graph=True)
         return l
