@@ -6,6 +6,7 @@ __pycache__/
 # C extensions
 *.so
 dinov2/
+results/
 
 # Distribution / packaging
 .Python
