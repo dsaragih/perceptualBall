@@ -24,9 +24,9 @@ fi
 # ga = 1000
 
 # ga = 10
-ns_values=(0.1 1 10)
-ts_values=(500 1000 1500)
-ds_values=(500 1000 1500)
+ns_values=(0.1 1)
+ts_values=(50 100 500)
+ds_values=(10 50 100)
 
 counter=1
 

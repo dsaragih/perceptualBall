@@ -7,6 +7,13 @@ __pycache__/
 *.so
 dinov2/
 results/
+adv_results/
+h_results/
+gray_results/
+results_2/
+adv_results_2/
+h_results_2/
+gray_results_2/
 
 # Distribution / packaging
 .Python

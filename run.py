@@ -163,12 +163,12 @@ def main():
     aim = (aim - aim.min())/(aim.max()-aim.min())
     aim = (aim*255).astype(np.uint8)
 
-    response = premodel(adv.cuda())
+    adv_response = premodel(adv.cuda())
+    image = utils.open_and_preprocess(args.image)
+    response = premodel(image.cuda())
 
-    target_response = response[0, args.targetID].item()
-    print(f"Target response: {target_response}")
-    # max
-    print(f"Original {response[0, 92].item()}")
+    print(f"Original response on target: {response[0, args.targetID].item()}")
+    print(f"Adversarial response on target: {adv_response[0, args.targetID].item()}")
 
     # Plot losses and save figure as pdf
     # Clear
