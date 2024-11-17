@@ -4,6 +4,7 @@
 from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 import piq
 import os
@@ -98,6 +99,9 @@ def create_perceptual_loss_dino(value, pre_dino_fn, img_tensor, img_dino_tensor,
     clstoken = dino_features['x_norm_clstoken']
 
     L2 = torch.nn.MSELoss()
+    if targetID is not None:
+        baseline = model(img_tensor)[0, targetID].abs()
+
 
     def loss(img):
         # perceptual loss
@@ -128,7 +132,9 @@ def create_perceptual_loss_dino(value, pre_dino_fn, img_tensor, img_dino_tensor,
         else:
             # Perturb img to maximize response of targetID
             lab = response[0, targetID]
-            label_loss = target_scalar / (lab + 1e-6)
+            label_loss = target_scalar / (lab + baseline + 1)
+            # print(f"Label type: {type(label_loss)}, Label shape: {label_loss.shape}")
+
 
         losses = [perceptual_loss, prior_loss, dino_loss, brisque_loss, label_loss]
         # reweighted_losses = _reweigh_losses(torch.stack(losses))

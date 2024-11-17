@@ -24,34 +24,46 @@ fi
 # ga = 1000
 
 # ga = 10
-ns_values=(0.1 1)
-ts_values=(50 100 500)
-ds_values=(10 50 100)
+# ns_values=(0.1)
+# ts_values=(50 100 500)
+# ds_values=(50 100 500)
+# gs_values=(10 100 1000)
+
+# Tuples (gs, ns, ts, ds)
+tuples_list=(
+    "10 0.1 100 100"
+    "10 10 100 100" # brisque as prior
+    "10 0.1 1 100" # dino only
+    "1000 0.1 1 100" # dino + perp
+    "10 10 1 100" # dino + brisque
+    "10 0.1 100 1" # label only
+    "1000 0.1 100 1" # label + perp
+    "10 10 100 1" # label + brisque
+    "10 10 1 1" # brisque
+)
 
 counter=1
 
-# Loop over each combination of ns, ts, and ds
-for ns in "${ns_values[@]}"; do
-    for ts in "${ts_values[@]}"; do
-        for ds in "${ds_values[@]}"; do
-            echo "Running with ns=${ns}, ts=${ts}, ds=${ds}"
-            
-            OUTPUT_DIR="${1}/results_${counter}"
+# Loop over each tuple
+for tuple in "${tuples_list[@]}"; do
+    # Read the values of gs, ns, ts, and ds from the tuple
+    read -r gs ns ts ds <<< "$tuple"
 
-            python run.py \
-                --k 20 \
-                --epochs 5 \
-                --ga 10 \
-                --sa 0 \
-                --ds $ds \
-                --targetID $TARGET \
-                --ts $ts \
-                --ns $ns \
-                $IMAGE_ARG \
-                --out_dir $OUTPUT_DIR
-            
-            ((counter++))
-        done
-    done
+    echo "Running with gs=${gs}, ns=${ns}, ts=${ts}, ds=${ds}"
+
+    OUTPUT_DIR="${1}/results_${counter}"
+
+    python run.py \
+        --k 50 \
+        --epochs 5 \
+        --ga $gs \
+        --sa 0 \
+        --ds $ds \
+        --targetID $TARGET \
+        --ts $ts \
+        --ns $ns \
+        $IMAGE_ARG \
+        --out_dir $OUTPUT_DIR
+
+    ((counter++))
 done
-

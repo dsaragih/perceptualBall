@@ -18,15 +18,15 @@ fi
 #!/bin/bash
 
 # Lists to iterate over
-# ns_values=(0 0.1 1)
-# ts_values=(500 1000 1500)
-# ds_values=(10 100 500)
+ns_values=(0.1)
+ts_values=(500 1000 1500)
+ds_values=(10 100 500)
 # ga = 1000
 
 # ga = 10
-ns_values=(0.1 1 10)
-ts_values=(500 1000 1500)
-ds_values=(500 1000 1500)
+# ns_values=(0.1)
+# ts_values=(50 100 500)
+# ds_values=(10 50 100)
 
 counter=1
 
@@ -39,7 +39,7 @@ for ns in "${ns_values[@]}"; do
             OUTPUT_DIR="${1}/results_${counter}"
 
             python run.py \
-                --k 20 \
+                --k 50 \
                 --epochs 5 \
                 --ga 10 \
                 --sa 0 \
@@ -54,4 +54,5 @@ for ns in "${ns_values[@]}"; do
         done
     done
 done
+
 

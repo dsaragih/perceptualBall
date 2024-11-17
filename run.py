@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 # Simple function wrapper
 from functools import partial
 
-def perceptual_dino(args, model=None,layerLists=['16', '19', '22', '25', '29', '32'], img_size=(952, 952), patch_size=14):
+def perceptual_dino(args, model=None,layerLists=['16', '19', '22', '25', '29', '32'], img_size=(224, 224), patch_size=14):
     '''
     perceptual function that returns a saliency map. 
     k = iterations
