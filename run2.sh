@@ -31,15 +31,15 @@ fi
 
 # Tuples (gs, ns, ts, ds)
 tuples_list=(
-    "10 0.1 100 100"
-    "10 10 100 100" # brisque as prior
-    "10 0.1 1 100" # dino only
-    "1000 0.1 1 100" # dino + perp
-    "10 10 1 100" # dino + brisque
-    "10 0.1 100 1" # label only
-    "1000 0.1 100 1" # label + perp
-    "10 10 100 1" # label + brisque
-    "10 10 1 1" # brisque
+    # "10 0.1 100 100"
+    # "10 10 100 100" # brisque as prior
+    "10 0.1 1 500" # dino only
+    "1000 0.1 1 500" # dino + perp
+    "10 10 1 500" # dino + brisque
+    # "10 0.1 100 1" # label only
+    # "1000 0.1 100 1" # label + perp
+    # "10 10 100 1" # label + brisque
+    # "10 10 1 1" # brisque
 )
 
 counter=1
@@ -54,8 +54,8 @@ for tuple in "${tuples_list[@]}"; do
     OUTPUT_DIR="${1}/results_${counter}"
 
     python run.py \
-        --k 50 \
-        --epochs 5 \
+        --k 5 \
+        --epochs 50 \
         --ga $gs \
         --sa 0 \
         --ds $ds \

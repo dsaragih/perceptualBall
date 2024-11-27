@@ -226,7 +226,7 @@ def dino_find_direction(
     direction.requires_grad = True
     # set up loss
     optimizer = torch.optim.LBFGS([direction, ], max_iter=iterations, lr=1)
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, epochs*iterations, eta_min=0.001)
     losses = {}
 
     for epoch in range(epochs):

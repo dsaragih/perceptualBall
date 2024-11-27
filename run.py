@@ -91,7 +91,7 @@ def perceptual(image_name,k=100,model=None,layerLists=['16', '19', '22', '25', '
 def parse_args():
     import argparse
     parser = argparse.ArgumentParser(description='Perceptual Ball')
-    parser.add_argument('--image', type=str, default='ILSVRC2012_val_00000051.JPEG', help='Image name')
+    parser.add_argument('--image', type=str, default='base_images/ILSVRC2012_val_00000051.JPEG', help='Image name')
     parser.add_argument('--out_dir', type=str, default='results', help='Output directory')
     parser.add_argument('--k', type=int, default=50, help='Number of iterations')
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs')

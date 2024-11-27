@@ -16,6 +16,11 @@ h_results_2/
 gray_results_2/
 noisy_results/
 noisy_results_2/
+fish_results/
+fish_results_2/
+perturbations.ipynb
+
+# ipynb
 
 # Distribution / packaging
 .Python

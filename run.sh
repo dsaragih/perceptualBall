@@ -21,7 +21,7 @@ fi
 ns_values=(0.1)
 ts_values=(500 1000 1500)
 ds_values=(10 100 500)
-# ga = 1000
+# ga = 1000 
 
 # ga = 10
 # ns_values=(0.1)
@@ -39,9 +39,9 @@ for ns in "${ns_values[@]}"; do
             OUTPUT_DIR="${1}/results_${counter}"
 
             python run.py \
-                --k 50 \
-                --epochs 5 \
-                --ga 10 \
+                --k 5 \
+                --epochs 50 \
+                --ga 0.1 \
                 --sa 0 \
                 --ds $ds \
                 --targetID $TARGET \
